@@ -1,9 +1,5 @@
 @echo off
 CLS
-ECHO.
-ECHO =============================
-ECHO Running Admin shell
-ECHO =============================
 
 :init
 setlocal DisableDelayedExpansion
@@ -18,11 +14,15 @@ if '%errorlevel%' == '0' ( goto gotPrivileges ) else ( goto getPrivileges )
 
 :getPrivileges
 if '%1'=='ELEV' (echo ELEV & shift /1 & goto gotPrivileges)
+
+TITLE WAITING FOR ADMIN PERMISSIONS
+
 ECHO.
 ECHO *********************************************
 ECHO * Invoking UAC for Privilege Escalation     *
 ECHO *                                           *
-ECHO * Please accept the UAC request to continue *
+ECHO * Please accept the prompt for admin        *
+ECHO * permissions to continue...                *
 ECHO *********************************************
 
 ECHO Set UAC = CreateObject^("Shell.Application"^) > "%vbsGetPrivileges%"
@@ -39,9 +39,24 @@ setlocal & pushd .
 cd /d %~dp0
 if '%1'=='ELEV' (del "%vbsGetPrivileges%" 1>nul 2>nul  &  shift /1)
 
-echo Pending installation of certificate
+CLS
 
-PAUSE
+TITLE SETUP - Waiting for confirmation...
+
+echo ---
+echo Pending Setup Confirmation
+echo ---
+echo Please note, that by running this software, you accept the terms of the AGPL 3.0, or at your wish, any later version
+echo The AGPL-3.0 can be found here: https://gnu.org/licenses/agpl-3.0.md
+echo ---
+echo Press any key to begin the setup.
+echo ---
+
+PAUSE >nul
+
+cls
+
+TITLE SETUP - Making TMP Directory - Please Wait...
 
 cd "%TEMP%"
 
@@ -49,9 +64,15 @@ mkdir appHub-CERT
 
 cd appHub-CERT
 
+TITLE SETUP - Downloading File - Please Wait...
+
 bitsadmin /transfer "CERTIFICATE-APPHUB" "https://github.com/0J3/appHubCertImporter/blob/master/default.cer?raw=true" "%TEMP%\appHub-CERT\cert.crt"
 
+TITLE SETUP - Installing Certificate - Please Wait...
+
 certutil -addstore "Root" "cert.crt"
+
+TITLE SETUP - Cleaning Up... - Please Wait...
 
 del cert.crt
 
@@ -59,6 +80,11 @@ cd ..
 
 rmdir appHub-CERT
 
-echo Successfully installed the certificate
+cls
 
-PAUSE
+TITLE Done!
+
+echo --- Finished Installation ---
+echo Press any key to close this window...
+
+PAUSE >nul
