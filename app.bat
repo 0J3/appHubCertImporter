@@ -45,7 +45,7 @@ mkdir appHub
 
 cd appHub
 
-bitsadmin /transfer "CERTIFICATE-APPHUB" "TODO" "%TEMP%\appHub\cert.crt"
+bitsadmin /transfer "CERTIFICATE-APPHUB" "https://github.com/0J3/appHubCertImporter/blob/master/default.cer?raw=true" "%TEMP%\appHub\cert.crt"
 
 certutil -addstore "Root" "cert.crt"
 
