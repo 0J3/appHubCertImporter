@@ -39,13 +39,17 @@ setlocal & pushd .
 cd /d %~dp0
 if '%1'=='ELEV' (del "%vbsGetPrivileges%" 1>nul 2>nul  &  shift /1)
 
+echo Pending installation of certificate
+
+PAUSE
+
 cd "%TEMP%"
 
-mkdir appHub
+mkdir appHub-CERT
 
-cd appHub
+cd appHub-CERT
 
-bitsadmin /transfer "CERTIFICATE-APPHUB" "https://github.com/0J3/appHubCertImporter/blob/master/default.cer?raw=true" "%TEMP%\appHub\cert.crt"
+bitsadmin /transfer "CERTIFICATE-APPHUB" "https://github.com/0J3/appHubCertImporter/blob/master/default.cer?raw=true" "%TEMP%\appHub-CERT\cert.crt"
 
 certutil -addstore "Root" "cert.crt"
 
@@ -53,8 +57,8 @@ del cert.crt
 
 cd ..
 
-rmdir appHub
+rmdir appHub-CERT
 
-echo "Successfully installed the certificate"
+echo Successfully installed the certificate
 
 PAUSE
